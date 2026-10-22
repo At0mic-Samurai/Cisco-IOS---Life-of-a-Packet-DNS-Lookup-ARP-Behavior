@@ -231,9 +231,21 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 <img width="327" height="120" alt="imagen" src="https://github.com/user-attachments/assets/735c749d-35a7-47a0-b07c-69a7fce4b2e7" /> 
 
 - Then SW1 will send the unicast ARP reply out only port Fa0/1 which host A is plugged into because SW1 already has that entry in its MAC address table
-- Finally host A recieves the unicast ARP reply and adds an entry for router R1 mapping IP address 10.10.10.1 to MAC address 00d0.97c7.8901 to its ARP cache. It will use this whenever it needs to send traffic to another IP subnet, like the previous DNS request
+- Finally host A recieves the unicast ARP reply and adds an entry for router R1 mapping IP address 10.10.10.1 to MAC address 00d0.97c7.8901 to its ARP cache. It will use this whenever it needs to send traffic (like the previous DNS request) to another IP subnet
 
+<img width="418" height="162" alt="imagen" src="https://github.com/user-attachments/assets/6aed60da-2c56-413a-853a-181e60d85e6c" />
 
+---
+
+**Remember the DNS request host A was holding?** At this point host A can send it to de DNS server with the address 10.10.100.10 on the green subnet
+
+<img width="920" height="658" alt="imagen" src="https://github.com/user-attachments/assets/58870ed6-fac1-47a6-b663-ea99213ddf01" />
+
+- SW1 sees the destination MAC address and beacuse of its MAC address table knows it has to send the DNS request out only port Fa0/2 which router R1 is reachable
+- Router R1 will recieve the DNS request packet and see that the destination IP address belongs to the green 10.10.100.0/24 subnet, which is actually directly connected to because it has an interface in that subnet, so it knows the destination IP address should be available out interface Gig0/1
+- R1 doesn't know the MAC address of 10.10.100.10 so it will hold the DNS request packet and send a broadcast ARP request out of its interface Gig0/1
+
+<img width="906" height="661" alt="imagen" src="https://github.com/user-attachments/assets/f000ca3c-72f7-40d0-b592-db6d5404fa75" />
 
 
 
