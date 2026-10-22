@@ -213,11 +213,27 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 <img width="703" height="276" alt="imagen" src="https://github.com/user-attachments/assets/cfac433c-4419-40ab-ac38-80dcd93da02f" /> 
 
 - In this point, the broadcast ARP request is received by the switch SW1
-- SW1 then will add an entry in its MAC address table maping Host A's MAC address 0007.EC96.2DE8 to port Fa0/1, so it knows that Host A is reachable through this port
+- SW1 then will add an entry in its MAC address table mapping Host A's MAC address 0007.EC96.2DE8 to port Fa0/1, so it knows that Host A is reachable through this port
 
 <img width="321" height="107" alt="imagen" src="https://github.com/user-attachments/assets/43652338-237e-4254-8987-2d0e92b8ecb4" />
 
-- Finally SW1 will flood the broadcast traffic out all ports apart from the one it was received on (SW1 do this because FFFF.FFFF.FFF is the layer 2 broadcast address, it means "send the traffic everywhere")
+- SW1 will flood the broadcast traffic out all ports apart from the one it was received on (SW1 do this because FFFF.FFFF.FFF is the layer 2 broadcast address, it means "send the traffic everywhere"), in this case out only port Fa0/2
+- The broadcast ARP request will hit router R1's interface 10.10.10.1, R1 will process the request and see it is for itself, so it will send  a unicast ARP reply back to host A
+
+<img width="711" height="280" alt="imagen" src="https://github.com/user-attachments/assets/297501a3-4375-4221-97f2-1a8e914d0bcd" />
+
+- Router R1 will also add an entry for host A mapping IP address 10.10.10.10 to MAC address 0007.EC96.2DE8 to its ARP cache
+
+<img width="571" height="56" alt="imagen" src="https://github.com/user-attachments/assets/816510ab-1778-4908-a8ad-f00d785f1aed" />
+
+- Switch SW1 will add another entry in its MAC address table mapping router R1's MAC address 00d0.97c7.8901 to port Fa0/2
+
+<img width="327" height="120" alt="imagen" src="https://github.com/user-attachments/assets/735c749d-35a7-47a0-b07c-69a7fce4b2e7" /> 
+
+- Then SW1 will send the unicast ARP reply out only port Fa0/1 which host A is plugged into because SW1 already has that entry in its MAC address table
+- Finally host A recieves the unicast ARP reply and adds an entry for router R1 mapping IP address 10.10.10.1 to MAC address 00d0.97c7.8901 to its ARP cache. It will use this whenever it needs to send traffic to another IP subnet, like the previous DNS request
+
+
 
 
 
