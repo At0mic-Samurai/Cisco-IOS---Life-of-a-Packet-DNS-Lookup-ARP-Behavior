@@ -242,8 +242,8 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 <img width="920" height="658" alt="imagen" src="https://github.com/user-attachments/assets/58870ed6-fac1-47a6-b663-ea99213ddf01" />
 
 - SW1 sees the destination MAC address and beacuse of its MAC address table knows it has to send the DNS request out only port Fa0/2 which router R1 is reachable
-- Router R1 will recieve the DNS request packet and see that the destination IP address belongs to the green 10.10.100.0/24 subnet, which is actually directly connected to because it has an interface in that subnet, so it knows the destination IP address should be available out interface Gig0/1
-- R1 doesn't know the MAC address of 10.10.100.10 so it will hold the DNS request packet and send a broadcast ARP request out of its interface Gig0/1
+- Router R1 will recieve the DNS request packet and see that the destination IP address belongs to the green 10.10.100.0/24 subnet, which is actually directly connected to because it has an interface in that subnet, so it knows the destination IP address should be available in that subnet
+- R1 doesn't know the MAC address of 10.10.100.10 so it will hold the DNS request packet from Host A and send a broadcast ARP request out of its interface Gig0/1
 
 <img width="906" height="661" alt="imagen" src="https://github.com/user-attachments/assets/f000ca3c-72f7-40d0-b592-db6d5404fa75" />
 
