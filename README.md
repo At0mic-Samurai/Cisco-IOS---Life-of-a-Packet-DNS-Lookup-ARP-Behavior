@@ -247,17 +247,27 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 
 <img width="906" height="661" alt="imagen" src="https://github.com/user-attachments/assets/f000ca3c-72f7-40d0-b592-db6d5404fa75" />
 
+- The broadcast ARP request will be received by the switch SW2 and it will add an entry in its MAC address table mapping R1's MAC address 00d0.97c7.8902 to port Fa0/1
 
+<img width="332" height="107" alt="imagen" src="https://github.com/user-attachments/assets/5a57a57e-fe70-458c-b6b0-dc0cfd32e931" />
 
+- Then SW2 it's going to flood the broadcast traffic out all ports apart from the one it was received on, in this case only port Fa0/2
+- The broadcast ARP request will hit the DNS server's interface 10.10.100.10, it will process the request and see it is for itself
+- The DNS server adds an entry for router R1 mapping the IP address 10.10.100.1 to MAC address 00d0.97c7.8902 to its ARP cache. It will use this whenever it needs to send traffic to another IP subnet:
 
+<img width="424" height="185" alt="imagen" src="https://github.com/user-attachments/assets/d88f3067-260b-4a38-b17d-ecd2854900fb" />
 
+- DNS server don't forget to send a unicast ARP reply back to R1:
 
+<img width="722" height="528" alt="imagen" src="https://github.com/user-attachments/assets/a8048f7d-0d44-4278-9d10-d82f0bcee028" />
 
+- SW2 will add an entry in its MAC address table mapping the DNS server MAC address 00D0.BADA.D8BE to port Fa0/2:
 
+<img width="328" height="120" alt="imagen" src="https://github.com/user-attachments/assets/5e67fbb5-2f4e-4583-a3b6-d6b487a170b8" />
 
+- Beacuse of it MAC address table, SW2 will send the unicast ARP reply out only port Fa0/1 which R1 is plugged into
+- R1 receives the reply and adds an entry for the DNS server mapping IP address 10.10.100.10 to MAC address 00D0.BADA.D8BE to its ARP cache:
 
+<img width="569" height="111" alt="imagen" src="https://github.com/user-attachments/assets/435a332b-f12e-4638-84d9-5da9a73f76f7" />
 
-
-
-
-
+- Now R1 can send the DNS request it was holding from Host A to the DNS Server
