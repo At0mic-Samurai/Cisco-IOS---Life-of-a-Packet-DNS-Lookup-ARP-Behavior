@@ -206,7 +206,7 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 
 ## DNS & ARP requests 
 
-- **Host A** which has the IP 10.10.10.10 belongs to the pink 10.10.10.0/24 subnet, and wants to send a packet to the FQDN `webserver.com` at 10.10.12.10, but initially it doesn't know the destination IP address, so it will hold the original packet and send a DNS request to its DNS server at 10.10.100.10 (the DNS server is already configured at this point)
+- **Host A** which has the IP 10.10.10.10 belongs to the pink 10.10.10.0/24 subnet, and wants to send an http GET request packet to the FQDN `webserver.com` at 10.10.12.10, but initially it doesn't know the destination IP address, so it will hold that original packet and send a DNS request to its DNS server at 10.10.100.10 (the DNS server is already configured at this point)
 - **Host A** knows that its own IP address is on a different subnet of the DNS server's IP address, and that's why the DNS request needs to be sent via router R1
 - **Host A** will hold the DNS request and first send a broadcast ARP request to the switch SW1 looking for its default gateway MAC address
 
