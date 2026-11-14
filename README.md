@@ -237,13 +237,13 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 
 ---
 
-**Remember the DNS request host A was holding?** At this point host A can send it to de DNS server with the address 10.10.100.10 on the green subnet
+**Remember the DNS request host A was holding?** At this point host A can send it to de DNS server at 10.10.100.10 on the green subnet
 
 <img width="920" height="658" alt="imagen" src="https://github.com/user-attachments/assets/58870ed6-fac1-47a6-b663-ea99213ddf01" />
 
 - SW1 sees the destination MAC address and beacuse of its MAC address table knows it has to send the DNS request out only port Fa0/2 which router R1 is reachable
-- Router R1 will recieve the DNS request packet and see that the destination IP address belongs to the green 10.10.100.0/24 subnet, which is actually directly connected to because it has an interface in that subnet, so it knows the destination IP address should be available in that subnet
-- R1 doesn't know the MAC address of 10.10.100.10 so it will hold the DNS request packet from Host A and send a broadcast ARP request out of its interface Gig0/1
+- Router R1 will recieve the DNS request packet and see that the destination IP address belongs to the green 10.10.100.0/24 subnet, which is actually directly connected to because it has an interface in that subnet, so it knows the destination IP address should be available there
+- But R1 doesn't know the MAC address of 10.10.100.10 so it will hold the DNS request packet from Host A and send a broadcast ARP request out of its interface Gig0/1
 
 <img width="906" height="661" alt="imagen" src="https://github.com/user-attachments/assets/f000ca3c-72f7-40d0-b592-db6d5404fa75" />
 
@@ -257,7 +257,7 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 
 <img width="424" height="185" alt="imagen" src="https://github.com/user-attachments/assets/d88f3067-260b-4a38-b17d-ecd2854900fb" />
 
-- DNS server don't forget to send a unicast ARP reply back to R1:
+- DNS sends a unicast ARP reply back to R1:
 
 <img width="722" height="528" alt="imagen" src="https://github.com/user-attachments/assets/a8048f7d-0d44-4278-9d10-d82f0bcee028" />
 
@@ -265,9 +265,18 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 
 <img width="328" height="120" alt="imagen" src="https://github.com/user-attachments/assets/5e67fbb5-2f4e-4583-a3b6-d6b487a170b8" />
 
-- Beacuse of it MAC address table, SW2 will send the unicast ARP reply out only port Fa0/1 which R1 is plugged into
+- Beacuse of its MAC address table, SW2 will send the unicast ARP reply out only port Fa0/1 which R1 is plugged into
 - R1 receives the reply and adds an entry for the DNS server mapping IP address 10.10.100.10 to MAC address 00D0.BADA.D8BE to its ARP cache:
 
 <img width="569" height="111" alt="imagen" src="https://github.com/user-attachments/assets/435a332b-f12e-4638-84d9-5da9a73f76f7" />
 
 - Now R1 can send the DNS request it was holding from Host A to the DNS Server
+
+>[!Note]
+>Notice how the source and destination MAC addresses of a packet are updated hop by hop, but the source and destination IP addresses always remain unchanged end to end.
+>Thats why the source and destination MAC addresses will be updated to come from R1 and go to the DNS Server, while the source and destination IP addresses are still Host A 10.10.10.10 and the DNS Server 10.10.100.10
+
+<img width="895" height="660" alt="imagen" src="https://github.com/user-attachments/assets/19ff00df-d923-4d66-bad1-cd5032d3f0ef" />
+
+- SW2 will send the DNS request out only port Fa0/2 which the DNS Server is plugged into (which it already has in its MAC address table)
+- The DNS request packet will be recevied by the DNS Server and it will see that the destination is itself
