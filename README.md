@@ -279,4 +279,20 @@ TCP Ports 80 and 443 for web traffic are listening on the server
 <img width="895" height="660" alt="imagen" src="https://github.com/user-attachments/assets/19ff00df-d923-4d66-bad1-cd5032d3f0ef" />
 
 - SW2 will send the DNS request out only port Fa0/2 which the DNS Server is plugged into (which it already has in its MAC address table)
-- The DNS request packet will be recevied by the DNS Server and it will see that the destination is itself
+- The DNS request packet will be received by the DNS Server and it will see that the destination is itself, so it will take a look into its DNS databse and see an address record (A record) for `webserver.com` at 10.10.12.10
+- The DNS server will send this information to Host A in a DNS response, and it knows to send that response to 10.10.10.10 from the source IP address in the DNS request
+- It also knows to send it via R1 because the destination (Host A) is in another subnet, but there's no problem, it already has R1's MAC address in its ARP cache
+
+<img width="903" height="655" alt="imagen" src="https://github.com/user-attachments/assets/9d01d052-79ec-43a7-80ad-89b102044a31" />
+
+- SW2 will receive the DNS response and send it out only port Fa0/1 which R1 is plugged into (which it already has in its MAC address table)
+- R1 will receive the DNS response packet and see that the destination IP address is 10.10.10.10 (which is reachable out of its interface Gig0/0)
+- R1 already has Host A's MAC address in its ARP cache
+
+<img width="900" height="659" alt="imagen" src="https://github.com/user-attachments/assets/c49be1dd-c296-415f-af79-f2a979803e2d" />
+
+- SW1 will receive the DNS response and send it out only port Fa0/1 which Host A is plugged into (which it already has in its MAC address table)
+- Host A learns that webserver.com is available at 10.10.12.10 and it can now update the original packet it was waiting to send to webserver.com with that destination IP address
+- Host A sees that webserver.com is on another subnet so it knows any packets it sends there must go via its default gateway (R1)
+
+
